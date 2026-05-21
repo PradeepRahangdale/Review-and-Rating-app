@@ -47,7 +47,7 @@ Frontend runs at **http://localhost:5173**
 
 ## Deploy live
 
-See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for step-by-step hosting:
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for step-by-step hosting (Render root dir = `backend`, test `/api/companies`):
 
 - **Backend** → Render (`backend` folder)
 - **Frontend** → Vercel (`frontend` folder, set `VITE_API_URL`)
@@ -85,3 +85,20 @@ review-rating-app/
 1. Start MongoDB before running the backend.
 2. Run `npm run seed` once to load sample companies and reviews (or add data via the UI).
 3. Screens: Home (company list) → Detail Review → Add Review modal.
+
+## Seed data on localhost vs live site
+
+`npm run seed` only writes to the database in **that environment’s** `MONGODB_URI`.
+
+| Environment | What to do |
+|-------------|------------|
+| **Localhost** | `cd backend && npm run seed` (uses `backend/.env`) |
+| **Render (production)** | Use the **same** Atlas `MONGODB_URI` in Render env vars, **or** rely on auto-seed: the server seeds automatically when the database has **zero** companies. Redeploy after pushing. |
+| **Vercel (frontend)** | Set `BACKEND_URL` (or `VITE_API_URL`) to your Render URL (e.g. `https://your-app.onrender.com`) and **redeploy**. |
+
+If the live site shows no companies, check in order:
+
+1. Vercel → **Environment Variables** → `BACKEND_URL` = your Render backend URL (no trailing slash). Example: `https://review-and-rating.onrender.com`
+2. Render → **Environment** → `MONGODB_URI` and `FRONTEND_URL` (your Vercel URL for CORS).
+3. Open `https://your-backend.onrender.com/api/companies` in the browser — you should see JSON with 4 companies.
+4. To force re-seed on Render: add env `SEED_RESET=true`, redeploy once, then remove it and redeploy again.
