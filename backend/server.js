@@ -6,19 +6,21 @@ const mongoose = require("mongoose");
 
 const companiesRouter = require("./routes/companies");
 const reviewsRouter = require("./routes/reviews");
+const { connectMongo } = require("./config/mongodb");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const rawMongoUri =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/review-rating";
-const MONGODB_URI = rawMongoUri.replace(
-  /^mongodb:\/\/localhost(?=[:\/])/,
-  "mongodb://127.0.0.1",
+
+const corsOrigins = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: corsOrigins.length ? corsOrigins : true,
+  }),
 );
-
-console.log("Connecting to MongoDB at", MONGODB_URI);
-
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -27,8 +29,7 @@ app.get("/api/health", (_req, res) => res.json({ status: "ok" }));
 app.use("/api/companies", companiesRouter);
 app.use("/api/reviews", reviewsRouter);
 
-mongoose
-  .connect(MONGODB_URI)
+connectMongo(mongoose)
   .then(() => {
     console.log("MongoDB connected");
     app.listen(PORT, () =>

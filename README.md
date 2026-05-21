@@ -18,7 +18,7 @@ Company review and rating platform matching the provided Figma design.
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) 18+
-- [MongoDB](https://www.mongodb.com/try/download/community) running locally (or MongoDB Atlas URI)
+- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) cluster (or MongoDB running locally)
 
 ## Setup
 
@@ -28,6 +28,8 @@ Company review and rating platform matching the provided Figma design.
 cd backend
 npm install
 copy .env.example .env
+# Set MONGODB_URI to your Atlas connection string (database name: review-rating)
+npm run seed
 npm run dev
 ```
 
@@ -42,6 +44,14 @@ npm run dev
 ```
 
 Frontend runs at **http://localhost:5173**
+
+## Deploy live
+
+See **[DEPLOYMENT.md](./DEPLOYMENT.md)** for step-by-step hosting:
+
+- **Backend** → Render (`backend` folder)
+- **Frontend** → Vercel (`frontend` folder, set `VITE_API_URL`)
+- **Database** → MongoDB Atlas (`review-rating` database)
 
 ## API Endpoints
 
@@ -73,5 +83,5 @@ review-rating-app/
 ## Notes for Submission
 
 1. Start MongoDB before running the backend.
-2. Add companies and reviews through the app UI (**+ Add Company** on home, then reviews on the detail page).
+2. Run `npm run seed` once to load sample companies and reviews (or add data via the UI).
 3. Screens: Home (company list) → Detail Review → Add Review modal.

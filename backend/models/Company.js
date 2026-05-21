@@ -23,4 +23,4 @@ companySchema.virtual('reviews', {
 companySchema.set('toJSON', { virtuals: true });
 companySchema.set('toObject', { virtuals: true });
 
-module.exports = mongoose.model('Company', companySchema);
+module.exports = mongoose.model('Company', companySchema, 'companies');
