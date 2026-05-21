@@ -28,7 +28,6 @@ Company review and rating platform matching the provided Figma design.
 cd backend
 npm install
 copy .env.example .env
-npm run seed
 npm run dev
 ```
 
@@ -74,5 +73,5 @@ review-rating-app/
 ## Notes for Submission
 
 1. Start MongoDB before running the backend.
-2. Run `npm run seed` once to load sample companies (matches Figma examples).
-3. Screens: Home (company list) → Detail Review → Add Review modal; use **+ Add Company** on home.
+2. Add companies and reviews through the app UI (**+ Add Company** on home, then reviews on the detail page).
+3. Screens: Home (company list) → Detail Review → Add Review modal.
