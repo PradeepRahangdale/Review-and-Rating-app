@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || '';
+import { API_BASE } from '../config';
 
 export default function CompanyLogo({ company, size = 'md' }) {
   if (company.logo) {

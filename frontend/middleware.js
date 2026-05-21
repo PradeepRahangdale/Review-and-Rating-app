@@ -1,23 +1,19 @@
+const DEFAULT_BACKEND_URL = 'https://review-and-rating-app.onrender.com';
+
 /**
  * Proxies /api and /uploads to the Node backend on Render.
- * Set BACKEND_URL or VITE_API_URL in Vercel → Environment Variables (no trailing slash).
+ * Override with BACKEND_URL or VITE_API_URL on Vercel if your Render URL differs.
  */
 export const config = {
   matcher: ['/api/:path*', '/uploads/:path*'],
 };
 
 export default async function middleware(request) {
-  const backend = (process.env.BACKEND_URL || process.env.VITE_API_URL || '').replace(/\/$/, '');
-
-  if (!backend) {
-    return Response.json(
-      {
-        message:
-          'Backend not configured. Set BACKEND_URL (or VITE_API_URL) on Vercel to your Render URL, then redeploy.',
-      },
-      { status: 503 }
-    );
-  }
+  const backend = (
+    process.env.BACKEND_URL ||
+    process.env.VITE_API_URL ||
+    DEFAULT_BACKEND_URL
+  ).replace(/\/$/, '');
 
   const url = new URL(request.url);
   const target = `${backend}${url.pathname}${url.search}`;

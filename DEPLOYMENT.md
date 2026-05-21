@@ -31,7 +31,7 @@
 
 Optional: `MONGODB_URI_DIRECT` if SRV lookup fails on Render.
 
-4. Deploy → copy your service URL, e.g. `https://review-and-rating-api.onrender.com`
+4. Deploy → copy your service URL, e.g. `https://review-and-rating-app.onrender.com`
 
 ### Test backend (important)
 
@@ -52,9 +52,9 @@ Open in browser:
 
 | Key | Value |
 |-----|--------|
-| `BACKEND_URL` | `https://YOUR-RENDER-URL.onrender.com` (no trailing slash) |
+| `BACKEND_URL` | Optional. Default is already `https://review-and-rating-app.onrender.com` in the repo. |
 
-3. **Redeploy** after saving env vars.
+3. **Redeploy** after pushing latest code (or after changing env vars).
 
 ### Test frontend
 

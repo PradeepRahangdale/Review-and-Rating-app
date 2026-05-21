@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || '';
+import { API_BASE } from '../config';
 
 async function request(url, options = {}) {
   const res = await fetch(`${API_BASE}${url}`, options);
