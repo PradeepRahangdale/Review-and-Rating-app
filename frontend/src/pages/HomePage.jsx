@@ -12,7 +12,7 @@ export default function HomePage() {
   const [companies, setCompanies] = useState([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [city, setCity] = useState('Indore, Madhya Pradesh, India');
+  const [city, setCity] = useState('');
   const [search, setSearch] = useState('');
   const [headerSearch, setHeaderSearch] = useState('');
   const [sortBy, setSortBy] = useState('name');
@@ -22,7 +22,7 @@ export default function HomePage() {
     setLoading(true);
     try {
       const data = await getCompanies({
-        city,
+        ...(city.trim() ? { city: city.trim() } : {}),
         search: search || headerSearch,
         sortBy,
       });
@@ -60,7 +60,7 @@ export default function HomePage() {
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="Indore, Madhya Pradesh, India"
+                placeholder="e.g. Indore"
               />
               <PinIcon className="filter-icon" />
             </div>
@@ -129,6 +129,7 @@ export default function HomePage() {
 
       <AddCompanyModal
         open={showAddModal}
+        defaultCity={city.trim()}
         onClose={() => setShowAddModal(false)}
         onSuccess={fetchCompanies}
       />

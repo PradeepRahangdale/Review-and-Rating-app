@@ -8,8 +8,11 @@ async function request(url, options = {}) {
 }
 
 export function getCompanies(params = {}) {
-  const query = new URLSearchParams(params).toString();
-  return request(`/api/companies?${query}`);
+  const clean = Object.fromEntries(
+    Object.entries(params).filter(([, v]) => v != null && String(v).trim() !== '')
+  );
+  const query = new URLSearchParams(clean).toString();
+  return request(`/api/companies${query ? `?${query}` : ''}`);
 }
 
 export function getCompany(id) {

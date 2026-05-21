@@ -27,21 +27,43 @@ const upload = multer({
   },
 });
 
-function buildCompanyFilter(query) {
-  const filter = {};
-  const { search, city } = query;
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
-  if (city && city.trim()) {
-    filter.city = { $regex: city.trim(), $options: 'i' };
-  }
-
-  if (search && search.trim()) {
-    const term = search.trim();
-    filter.$or = [
+function buildSearchClause(term) {
+  return {
+    $or: [
       { name: { $regex: term, $options: 'i' } },
       { location: { $regex: term, $options: 'i' } },
       { description: { $regex: term, $options: 'i' } },
-    ];
+    ],
+  };
+}
+
+function buildCompanyFilter(query) {
+  const filter = {};
+  const { search, city } = query;
+  const searchTerm = search?.trim();
+  const cityTerm = city?.trim();
+
+  if (cityTerm) {
+    const primaryCity = escapeRegex(cityTerm.split(',')[0].trim());
+    const cityClause = {
+      $or: [
+        { city: { $regex: primaryCity, $options: 'i' } },
+        { location: { $regex: primaryCity, $options: 'i' } },
+      ],
+    };
+
+    if (searchTerm) {
+      return { $and: [cityClause, buildSearchClause(searchTerm)] };
+    }
+    return cityClause;
+  }
+
+  if (searchTerm) {
+    return buildSearchClause(searchTerm);
   }
 
   return filter;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from './Modal';
 import { PinIcon, CalendarIcon } from './Icons';
 import { createCompany } from '../services/api';
@@ -12,10 +12,17 @@ const initial = {
   logoText: '',
 };
 
-export default function AddCompanyModal({ open, onClose, onSuccess }) {
+export default function AddCompanyModal({ open, onClose, onSuccess, defaultCity = '' }) {
   const [form, setForm] = useState(initial);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (open) {
+      setForm({ ...initial, city: defaultCity });
+      setError('');
+    }
+  }, [open, defaultCity]);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -31,7 +38,7 @@ export default function AddCompanyModal({ open, onClose, onSuccess }) {
       Object.entries(form).forEach(([key, value]) => data.append(key, value));
 
       await createCompany(data);
-      setForm(initial);
+      setForm({ ...initial, city: defaultCity });
       onSuccess?.();
       onClose();
     } catch (err) {
